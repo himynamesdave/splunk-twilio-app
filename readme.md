@@ -1,86 +1,122 @@
 Twilio App for Splunk
-====
+=================
 
-Thankyou for downloading the Twilio App v0.01.
+Welcome to the Splunk app for Twilio
+-------------
 
-A Twilio App for Splunk. Includes detailed views of call and SMS logs. Also includes SMS alert functionality.
+**Thanks for downloading the Splunk app for Twilio** it's great to see you here. Introductions over, lets get down to business.
 
-NOTE: This app does NOTHING by default! Please follow setup instructions below.
+**Important:** this app will NOT work unless you follow the setup instructions below - they're super simple to setup, I promise.
 
-Requirements
---
+__For your convenience, these instructions can also be found in the Splunk GUI once the app has been installed by visiting "help!" > "setup".__
 
-- Splunk installed. Download for free @ http://www.splunk.com/download?r=header
-- A Twilio account. Get an account and phone number for free @ https://www.twilio.com
+I'm 12, what is this?
+-------------
 
-Installing the App
---
+The Splunk app for Twilio comes in two parts.
 
-- 1. Copy: "/twilio-app" to "$SPLUNK_HOME/etc/apps"
-- 2. Restart Splunk
-- 3. Congratulations! The Twilio app is now installed.
+1) The first part helps you to export your Twilio logs via the Twilio API and ingest them into Splunk. To help you get started this app comes prebuilt with searches powering a number of dashboards and alerts for the ingested log data.
 
-Data Import
---
+2) The second part provides a SMS alerting functionality via Splunk's scripted alert triggers.
+
+What's in the box?
+-------------
+
+*1 x New Index (index=twilio)
+*2 x Python collection scripts (get_call_logs.py, get_sms_logs.py)
+*2 x File monitor inputs (call_log.csv, sms_log.csv)
+*4 x Prebuilt Dashboards (call center, call stats, sms center, billing)
+*3 x Prebuilt Alert (billing)
+*1 x Important Setup Instructions (you are here)
+
+Twilio Log Input Setup
+-------------
+
+**0) Overview**
+
+There are 4 steps you will need to get this app working.
+
+*Get your Twilio account keys
+*Edit log collection scripts
+*Configure input
+*Profit
+
+**1) Get your Twilio account keys**
+
+Get your Twilio Account SID and Auth Token on your [**Twilio Dashboard**](https://www.twilio.com)
+
+**2)Edit log collection scripts**
 
 This app contains two scripts (get_call_logs.py & get_sms_logs.py) that get call and SMS data from Twilio and place the returned information into two CSV files (call_log.csv and sms_log.csv).
 
-Twilio Call and SMS logs in CSV format downloaded directly imported from Twilio (https://www.twilio.com/help/faq/twilio-basics/how-do-i-export-my-smscall-logs) are also supported.
+You need to configure these scripts with your Twilio account keys:
 
-SETUP:
+*Go to "$SPLUNK_HOME/etc/apps/twilio-app/bin"
+*Using your favourite text editor open "get_call_logs.py" and "get_sms_logs.py"
+*Enter your Twilio Account SID (starting with AC) / Auth token
 
-Note: Your Twilio Account SID and Auth Token can be found under "Dashboard" @ https://www.twilio.com
+**Protip:** You might want to test that both scripts work by running them.
 
-*nix Users
+$ python get_call_logs.py
 
-- 1. Go to "$SPLUNK_HOME/etc/apps/twilio-app/bin".
-- 2. Using your favourite text editor open "get_call_logs.py" and "get_sms_logs.py"
-- 3a. Replace “YOUR_ACCOUNT_SID” with your Twilio Account SID (starting with AC)
-- 3b. Replace “YOUR_AUTH_TOKEN” with your Twilio Auth Token
-- 4. Run both scripts to test they work. You should see "call_log.csv" and "sms_log.csv" created in "$SPLUNK_HOME/etc/apps/twilio-app/bin"
-- 5. Go to "$SPLUNK_HOME/etc/apps/twilio-app/default".
-- 6. Move "inputs.conf" to "$SPLUNK_HOME/etc/apps/twilio-app/local"
-- 7. Using your favourite text editor open "$SPLUNK_HOME/etc/apps/twilio-app/local/inputs.conf"
-- 8. Replace "<$SPLUNK_HOME>" with the correct directory of your Splunk installation. Stanzas beginning with [script:///... run hourly calls to Twilio to collect new data. Stanzas beginning with [monitor:///... watch for any newly generated logs from the scripts.
+$ python get_sms_logs.py
 
-Note: Windows users will need to change the inputs.conf stanzas to the following: "[monitor://" and "script://"
+If everything has worked correctly you should see "call_log.csv" and "sms_log.csv" created in "$SPLUNK_HOME/etc/apps/twilio-app/bin"
 
-Installing SMS Alerts
---
+**3) Configure input**
 
-Note: Your Twilio Account SID and Auth Token can be found under "Dashboard" @ https://www.twilio.com
+*Go to "$SPLUNK_HOME/etc/apps/twilio-app/default"
+*Copy "inputs.conf" to "$SPLUNK_HOME/etc/apps/twilio-app/local"
+*Using your favourite text editor open "$SPLUNK_HOME/etc/apps/twilio-app/local/inputs.conf"
+*Replace "$SPLUNK_HOME" with the correct directory of your Splunk installation
+*Restart Splunk
+*Enable the scripted inputs in the Splunk GUI via: "Settings" > "Data Inputs" > "Scripts"
 
-SETUP:
+__Note: The CSV monitors (where log data is written to) are already enabled by default. The scripted inputs do not store any data, they are only used to call the Twilio API.__
 
-- 1. Copy "$SPLUNK_HOME/etc/apps/twilio-app/bin/textalert-twilio.py" to "$SPLUNK_HOME/bin/scripts"
-- 2. Edit "$SPLUNK_HOME/bin/scripts/textalert-twilio.py" with your favourite text editor and input:
-- 2a. Your Twilio Account SID (starting with AC)
-- 2b. Your Twilio Auth Token
-- 2c. TO phone number (recipient of SMS Text Message)
-- 2d. FROM phone number (sender of message, must be one of your Twilio Account phone nos.)
-- 3. In Splunk set up an alert and use textalert-twilio.py as the "Run a Script" option
-- 4. Congratulations! You have set up an SMS alert
+**4) Profit**
 
-Please note: Twilio will charge you for every SMS message sent. You can view Twilio pricing @ https://www.twilio.com/sms/pricing
+If everything has worked well, a simple search for "index=twilio" should return some results. You might need to restart Splunk first.
 
-Change log
----
+Should some of the dashboards be empty, run a search in Splunk to see if the fields used are in your logs. If you're still suspicious, check the CSV files that should be created exist and have been populated with data.
 
-v1 - Added support for automatic log import
-v0.1 - Beta Release
+Splunk SMS Alert Setup
+-------------
 
-To Do
----
+**0) Overview**
 
-- Phone Number ID Lookup (Phone Book)
-- Phone Number Extension Lookup (Country)
+There are 4 steps you will need to get this app working.
 
-Future Features?
----
+*Get your Twilio account keys
+*Edit alert scripts
+*Configure an alert
+*Profit
 
-Please submit feedback on apps.splunk.com!
+**1) Get your Twilio account keys**
 
-- Automated set-up?
-- UI management of alerts?
+Get your Twilio Account SID and Auth Token on your [**Twilio Dashboard**](https://www.twilio.com)
 
-If you would like to contribute to the developement of this app I'll also happily accept any pull requests @ https://github.com/splunkstart/twilio-app
+**2)Edit alert scripts**
+
+*Go to "$SPLUNK_HOME/etc/apps/twilio-app/bin"
+*Using your favourite text editor open "$SPLUNK_HOME/etc/apps/twilio-app/bin/textalert-twilio.py"
+*Enter your Twilio Account SID (starting with AC) / Auth token
+*Enter "TO phone number" (recipient of SMS Text Message)
+*Enter "FROM phone number" (sender of message, must be one of your Twilio Account phone #)
+
+**3) Configure an alert**
+
+*Configure a Splunk alert and select the "Run a Script" option
+*Set "textalert-twilio.py" as the script
+
+__Note: Twilio will charge you for every SMS message sent. You can view Twilio pricing @ https://www.twilio.com/sms/pricing__
+
+**4) Profit**
+
+If everything has worked well the "TO phone number" should be recieving alerts. If not, check the alerts are being fired in the alert manager in the Splunk GUI via: "Activity" > "Alert Manager"
+
+[END]
+
+Enjoy!
+
+[**@himynamesdave**](https://twitter.com/himynamesdave)
