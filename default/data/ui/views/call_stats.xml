@@ -1,0 +1,170 @@
+<form>
+  <label>Stats</label>
+  <description>A breakdown of Twilio Calls and SMS</description>
+  <fieldset autoRun="true" submitButton="false">
+    <input type="time" searchWhenChanged="true">
+      <default/>
+    </input>
+  </fieldset>
+  <row>
+    <html>
+      <h1>Calls</h1>
+    </html>
+  </row>
+  <row grouping="1,2">
+    <chart>
+      <title>Number of Calls (Inbound vs. Outbound)</title>
+      <searchString>index=twilio Sid="CA*" Direction="outbound*" OR Direction="inbound*" | timechart count by Direction</searchString>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <option name="charting.axisTitleX.visibility">visible</option>
+      <option name="charting.axisTitleY.visibility">visible</option>
+      <option name="charting.axisX.scale">linear</option>
+      <option name="charting.axisY.scale">linear</option>
+      <option name="charting.chart">line</option>
+      <option name="charting.chart.nullValueMode">zero</option>
+      <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+      <option name="charting.chart.stackMode">default</option>
+      <option name="charting.chart.style">shiny</option>
+      <option name="charting.drilldown">all</option>
+      <option name="charting.layout.splitSeries">0</option>
+      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+      <option name="charting.legend.placement">right</option>
+      <option name="charting.axisTitleX.text">Time</option>
+      <option name="charting.axisTitleY.text">Total Number of Calls</option>
+    </chart>
+    <single>
+      <title>Number of Calls Received</title>
+      <searchString>index=twilio Sid="CA*" Direction="inbound*"  | stats count</searchString>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <option name="linkView">search</option>
+      <option name="charting.axisTitleX.visibility">visible</option>
+      <option name="charting.axisTitleY.visibility">visible</option>
+      <option name="charting.axisX.scale">linear</option>
+      <option name="charting.axisY.scale">linear</option>
+      <option name="charting.chart">markerGauge</option>
+      <option name="charting.chart.nullValueMode">gaps</option>
+      <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+      <option name="charting.chart.stackMode">default</option>
+      <option name="charting.chart.style">shiny</option>
+      <option name="charting.drilldown">all</option>
+      <option name="charting.layout.splitSeries">0</option>
+      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+      <option name="charting.legend.placement">right</option>
+      <option name="underLabel">Calls Received</option>
+    </single>
+    <single>
+      <title>Number of Calls Placed</title>
+      <searchString>index=twilio Sid="CA*" Direction="outbound*" | stats count</searchString>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <option name="linkView">search</option>
+      <option name="charting.axisTitleX.visibility">visible</option>
+      <option name="charting.axisTitleY.visibility">visible</option>
+      <option name="charting.axisX.scale">linear</option>
+      <option name="charting.axisY.scale">linear</option>
+      <option name="charting.chart">markerGauge</option>
+      <option name="charting.chart.nullValueMode">gaps</option>
+      <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+      <option name="charting.chart.stackMode">default</option>
+      <option name="charting.chart.style">shiny</option>
+      <option name="charting.drilldown">all</option>
+      <option name="charting.layout.splitSeries">0</option>
+      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+      <option name="charting.legend.placement">right</option>
+      <option name="underLabel">Calls Placed</option>
+    </single>
+  </row>
+  <row grouping="1,2">
+    <chart>
+      <title>Total Call Length (Inbound vs. Outbound)</title>
+      <searchString>index=twilio Sid="CA*" Direction="outbound*" OR Direction="inbound*" | eval DurationMins = round(Duration/60,2) |timechart sum(DurationMins) by Direction</searchString>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <option name="charting.axisTitleX.visibility">visible</option>
+      <option name="charting.axisTitleY.visibility">visible</option>
+      <option name="charting.axisX.scale">linear</option>
+      <option name="charting.axisY.scale">linear</option>
+      <option name="charting.chart">line</option>
+      <option name="charting.chart.nullValueMode">zero</option>
+      <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+      <option name="charting.chart.stackMode">default</option>
+      <option name="charting.chart.style">shiny</option>
+      <option name="charting.drilldown">all</option>
+      <option name="charting.layout.splitSeries">0</option>
+      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+      <option name="charting.legend.placement">right</option>
+      <option name="charting.axisTitleY.text">Total Call Minutes</option>
+      <option name="charting.axisTitleX.text">Time</option>
+    </chart>
+    <single>
+      <title>Average Length of Inbound Calls</title>
+      <searchString>index=twilio Sid="CA*" Direction="inbound*" | eval DurationMins = round(Duration/60,2) | stats sum(DurationMins) AS TotalDuration count(Duration) as NumberOfCalls  | eval AveCallLength = round(TotalDuration/NumberOfCalls,2) | fields AveCallLength</searchString>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <option name="wrap">true</option>
+      <option name="rowNumbers">false</option>
+      <option name="dataOverlayMode">none</option>
+      <option name="drilldown">row</option>
+      <option name="count">10</option>
+      <option name="linkView">search</option>
+      <option name="underLabel">Duration (Mins)</option>
+    </single>
+    <single>
+      <title>Average Length of Outbound Calls</title>
+      <searchString>index=twilio Sid="CA*" Direction="outbound*" | eval DurationMins = round(Duration/60,2) | stats sum(DurationMins) AS TotalDuration count(Duration) as NumberOfCalls  | eval AveCallLength = round(TotalDuration/NumberOfCalls,2) | fields AveCallLength</searchString>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <option name="linkView">search</option>
+      <option name="underLabel">Duration (Mins)</option>
+    </single>
+  </row>
+  <row>
+    <html>
+      <h1>SMS</h1>
+    </html>
+  </row>
+  <row grouping="1,2">
+    <chart>
+      <title>Number of SMS (Inbound vs. Outbound)</title>
+      <searchString>index=twilio Sid="SM*" Direction="outbound*" OR Direction="inbound*" | timechart count by Direction</searchString>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <option name="wrap">true</option>
+      <option name="rowNumbers">false</option>
+      <option name="dataOverlayMode">none</option>
+      <option name="drilldown">row</option>
+      <option name="count">10</option>
+      <option name="charting.axisTitleX.visibility">visible</option>
+      <option name="charting.axisTitleY.visibility">visible</option>
+      <option name="charting.axisX.scale">linear</option>
+      <option name="charting.axisY.scale">linear</option>
+      <option name="charting.chart">line</option>
+      <option name="charting.chart.nullValueMode">zero</option>
+      <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+      <option name="charting.chart.stackMode">default</option>
+      <option name="charting.chart.style">shiny</option>
+      <option name="charting.drilldown">all</option>
+      <option name="charting.layout.splitSeries">0</option>
+      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+      <option name="charting.legend.placement">right</option>
+    </chart>
+    <single>
+      <title>Number of SMS Messages Recieved</title>
+      <searchString>index=twilio Sid="SM*" Direction="inbound*"  | stats count</searchString>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <option name="linkView">search</option>
+      <option name="underLabel">Messages Recieved</option>
+    </single>
+    <single>
+      <title>Number of SMS Messages Sent</title>
+      <searchString>index=twilio Sid="SM*" Direction="outbound*"  | stats count</searchString>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <option name="underLabel">Messages Sent</option>
+      <option name="linkView">search</option>
+    </single>
+  </row>
+</form>

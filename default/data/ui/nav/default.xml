@@ -1,0 +1,14 @@
+<nav search_view="call_stats" color="#ca0202">
+  <view name="search" default='true' />
+  <view name="call_stats" />
+  <view name="call_center" />
+  <view name="sms_center" />
+  <view name="billing" />
+  <view name="alerts" />
+
+  <collection label="Help!">
+	<view name="setup" />
+	<view name="ask_splunk_anything" />
+  <view name="fork_me" />
+  </collection>
+</nav>
