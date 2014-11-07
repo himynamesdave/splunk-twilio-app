@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# Top line: very important. Must have Twilio python library installed (https://www.twilio.com/docs/python/install)
 import os
 import sys
 import codecs
