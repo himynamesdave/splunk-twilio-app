@@ -6,8 +6,8 @@ import codecs
 from datetime import datetime, date
 from twilio.rest import TwilioRestClient
 
-ACCOUNT_SID = '$MY_ACCOUNT_SID'
-AUTH_TOKEN   = '$MY_AUTH_TOKEN'
+ACCOUNT_SID = '$ACf52b0f3f1271cfd4ebba420467b91c48'
+AUTH_TOKEN   = '$008fcfea857ba964baf9e7ec87809207'
 LOG_FILE        = 'call_log.csv'
 LAST_ENTRY    = None # "LAST_ENTRY" helps us to read log from the last date we have fetched
 RECORDS        =  []
