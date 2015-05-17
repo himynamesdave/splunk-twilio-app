@@ -49,25 +49,19 @@ Get your Twilio Account SID and Auth Token on your [**Twilio Dashboard**](https:
 
 This app contains two scripts (get_call_logs.py & get_sms_logs.py) that get call and SMS data from Twilio and place the returned information into two CSV files (call_log.csv and sms_log.csv).
 
-First, you will need to move these scripts outside of your Splunk install directory into an environment with both Python and the [**Twilio Python**](https://www.twilio.com/docs/python/install) library installed.
+You need to configure these scripts with your Twilio account keys:
 
-*Go to "$SPLUNK_HOME/etc/apps/twilio-app/twilio-scripts"
-*Move to new location (as per instructions above)
-
-__Note, by default the CSV files created by these scripts will reside in the same directory as where the scripts are placed.__
-
-Then you will need to configure these scripts with your Twilio account keys:
-
+*Go to "$SPLUNK_HOME/etc/apps/twilio-app/bin"
 *Using your favourite text editor open "get_call_logs.py" and "get_sms_logs.py"
 *Enter your Twilio Account SID (starting with AC) / Auth token
 
-**Protip:** You might want to test that both scripts work by running them manually.
+**Protip:** You might want to test that both scripts work by running them.
 
 $ python get_call_logs.py
 
 $ python get_sms_logs.py
 
-If everything has worked correctly you should see "call_log.csv" and "sms_log.csv" created in the directory where the scripts were placed.
+If everything has worked correctly you should see "call_log.csv" and "sms_log.csv" created in "$SPLUNK_HOME/etc/apps/twilio-app/bin"
 
 **3) Configure input**
 
@@ -102,7 +96,7 @@ There are 4 steps you will need to get this app working.
 
 Get your Twilio Account SID and Auth Token on your [**Twilio Dashboard**](https://www.twilio.com)
 
-**2) Edit alert scripts**
+**2)Edit alert scripts**
 
 *Go to "$SPLUNK_HOME/etc/apps/twilio-app/bin"
 *Using your favourite text editor open "$SPLUNK_HOME/etc/apps/twilio-app/bin/textalert-twilio.py"

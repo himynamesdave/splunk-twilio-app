@@ -5,7 +5,7 @@
   <html>
    <h2>Welcome to the Splunk app for Twilio</h2>
    <p><strong>Thanks for downloading the Splunk app for Twilio</strong>, it's great to see you here. Introductions over, lets get down to business.</p>
-   <p><strong>Important:</strong> this app will NOT work unless you follow the setup instructions below - they're super simple to setup, I promise.</p>
+   <p><strong>mportant:</strong> this app will NOT work unless you follow the setup instructions below - they're super simple to setup, I promise.</p>
    <hr />
    <h2>I'm 12, what is this?</h2>
    <p>The Splunk app for Twilio comes in two parts.</p>
@@ -35,22 +35,16 @@
    <p>Get your Twilio Account SID and Auth Token on your <a href="https://www.twilio.com" target="_blank">Twilio Dashboard</a>.</p>
    <p><strong>2)Edit log collection scripts</strong></p>
    <p>This app contains two scripts (get_call_logs.py and get_sms_logs.py) that get call and SMS data from Twilio and place the returned information into two CSV files (call_log.csv and sms_log.csv).</p>
-   <p>First, you will need to move these scripts outside of your Splunk install directory into an environment with both Python and the <a href="https://www.twilio.com/docs/python/install" target="_blank">Twilio Python library</a> installed.</p>
    <p>You need to configure these scripts with your Twilio account keys:</p>
    <ul>
-      <li>Go to "$SPLUNK_HOME/etc/apps/twilio-app/twilio-scripts"</li>
-      <li>Move to new location (as per instructions above)</li>
-   </ul>
-   <p><em>Note, by default the CSV files created by these scripts will reside in the same directory as where the scripts are placed.</em></p>
-   <p>Then you will need to configure these scripts with your Twilio account keys:</p>
-   <ul>
+      <li>Go to "$SPLUNK_HOME/etc/apps/twilio-app/bin"</li>
       <li>Using your favourite text editor open "get_call_logs.py" and "get_sms_logs.py"</li>
       <li>Enter your Twilio Account SID (starting with AC) / Auth token</li>
    </ul>
    <p><strong>Protip:</strong> You might want to test that both scripts work by running them.</p>
    <p><code>python get_call_logs.py</code></p>
    <p><code>python get_sms_logs.py</code></p>
-   <p>If everything has worked correctly you should see "call_log.csv" and "sms_log.csv" created in the directory where the scripts were placed.</p>
+   <p>If everything has worked correctly you should see "call_log.csv" and "sms_log.csv" created in "$SPLUNK_HOME/etc/apps/twilio-app/bin"</p>
    <p><strong>3) Configure input</strong></p>
    <ul>
       <li>Go to "$SPLUNK_HOME/etc/apps/twilio-app/default"</li>
