@@ -1,6 +1,6 @@
-#Splunk App for Twilio
+#Twilio App for Splunk
 
-The Splunk app for Twilio helps you ingest Twilio logs into Splunk. This app comes prebuilt with searches powering a number of dashboards and alerts for the ingested log data. It also provides Twilio SMS alerting functionality via Splunk's scripted alert triggers.
+Twilio App for Splunk helps you ingest Twilio logs into Splunk. This app comes prebuilt with searches powering a number of dashboards and alerts for the ingested log data. It also provides Twilio SMS alerting functionality via Splunk's scripted alert triggers.
 
 ##What's included
 
