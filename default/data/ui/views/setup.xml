@@ -1,0 +1,100 @@
+<dashboard>
+  <label>App Setup</label>
+  <description/>
+  <row>
+  <html>
+   <h2>Welcome to the Splunk app for Twilio</h2>
+   <p><strong>Thanks for downloading the Splunk app for Twilio</strong>, it's great to see you here. Introductions over, lets get down to business.</p>
+   <p><strong>Important:</strong> this app will NOT work unless you follow the setup instructions below - they're super simple to setup, I promise.</p>
+   <hr />
+   <h2>I'm 12, what is this?</h2>
+   <p>The Splunk app for Twilio comes in two parts.</p>
+   <p>1) The first part helps you to export your Twilio logs via the Twilio API and ingest them into Splunk. To help you get started this app comes prebuilt with searches powering a number of dashboards and alerts for the ingested log data.</p>
+   <p>2) The second part provides a SMS alerting functionality via Splunk's scripted alert triggers.</p>
+   <hr />
+   <h2>What's in the box?</h2>
+   <ul>
+      <li>1 x New Index (index=twilio)</li>
+      <li>2 x Python collection scripts (get_call_logs.py, get_sms_logs.py)</li>
+      <li>2 x File monitor inputs (call_log.csv, sms_log.csv)</li>
+      <li>4 x Prebuilt Dashboards (call center, call stats, sms center, billing)</li>
+      <li>3 x Prebuilt Alert (billing)</li>
+      <li>1 x Important Setup Instructions (you are here)</li>
+   </ul>
+   <hr />
+   <h2>Twilio Log Input Setup</h2>
+   <p><strong>0) Overview</strong></p>
+   <p>There are 4 steps you will need to get this app working.</p>
+   <ul>
+      <li>Get your Twilio account keys</li>
+      <li>Edit log collection scripts</li>
+      <li>Configure input</li>
+      <li>Profit</li>
+   </ul>
+   <p><strong>1) Get your Twilio account keys</strong></p>
+   <p>Get your Twilio Account SID and Auth Token on your <a href="https://www.twilio.com" target="_blank">Twilio Dashboard</a>.</p>
+   <p><strong>2)Edit log collection scripts</strong></p>
+   <p>This app contains two scripts (get_call_logs.py and get_sms_logs.py) that get call and SMS data from Twilio and place the returned information into two CSV files (call_log.csv and sms_log.csv).</p>
+   <p>First, you will need to move these scripts outside of your Splunk install directory into an environment with both Python and the <a href="https://www.twilio.com/docs/python/install" target="_blank">Twilio Python library</a> installed.</p>
+   <p>You need to configure these scripts with your Twilio account keys:</p>
+   <ul>
+      <li>Go to "$SPLUNK_HOME/etc/apps/twilio-app/twilio-scripts"</li>
+      <li>Move to new location (as per instructions above)</li>
+   </ul>
+   <p><em>Note, by default the CSV files created by these scripts will reside in the same directory as where the scripts are placed.</em></p>
+   <p>Then you will need to configure these scripts with your Twilio account keys:</p>
+   <ul>
+      <li>Using your favourite text editor open "get_call_logs.py" and "get_sms_logs.py"</li>
+      <li>Enter your Twilio Account SID (starting with AC) / Auth token</li>
+   </ul>
+   <p><strong>Protip:</strong> You might want to test that both scripts work by running them.</p>
+   <p><code>python get_call_logs.py</code></p>
+   <p><code>python get_sms_logs.py</code></p>
+   <p>If everything has worked correctly you should see "call_log.csv" and "sms_log.csv" created in the directory where the scripts were placed.</p>
+   <p><strong>3) Configure input</strong></p>
+   <ul>
+      <li>Go to "$SPLUNK_HOME/etc/apps/twilio-app/default"</li>
+      <li>Copy "inputs.conf" to "$SPLUNK_HOME/etc/apps/twilio-app/local"</li>
+      <li>Using your favourite text editor open "$SPLUNK_HOME/etc/apps/twilio-app/local/inputs.conf"</li>
+      <li>Replace "$SPLUNK_HOME" with the correct directory of your Splunk installation</li>
+      <li>Restart Splunk</li>
+      <li>Enable the scripted inputs in the Splunk GUI via: "Settings" > "Data Inputs" > "Scripts"</li>
+   </ul>
+   <p><em>Note: The CSV monitors (where log data is written to) are already enabled by default. The scripted inputs do not store any data, they are only used to call the Twilio API.</em></p>
+   <p><strong>4) Profit</strong></p>
+   <p>If everything has worked well, a simple search for "index=twilio" should return some results. You might need to restart Splunk first.</p>
+   <p>Should some of the dashboards be empty, run a search in Splunk to see if the fields used are in your logs. If you're still suspicious, check the CSV files that should be created exist and have been populated with data.</p>
+   <hr />
+   <h2>Splunk SMS Alert Setup</h2>
+   <p><strong>0) Overview</strong></p>
+   <p>There are 4 steps you will need to get this app working.</p>
+   <ul>
+      <li>Get your Twilio account keys</li>
+      <li>Edit alert scripts</li>
+      <li>Configure an alert</li>
+      <li>Profit</li>
+   </ul>
+   <p><strong>1) Get your Twilio account keys</strong></p>
+   <p>Get your Twilio Account SID and Auth Token on your <a href="https://www.twilio.com" target="_blank">Twilio Dashboard</a>.</p>
+   <p><strong>2)Edit alert scripts</strong></p>
+   <ul>
+      <li>Go to "$SPLUNK_HOME/etc/apps/twilio-app/bin"</li>
+      <li>Using your favourite text editor open "$SPLUNK_HOME/etc/apps/twilio-app/bin/textalert-twilio.py"</li>
+      <li>Enter your Twilio Account SID (starting with AC) / Auth token</li>
+      <li>Enter "TO phone number" (recipient of SMS Text Message)</li>
+      <li>Enter "FROM phone number" (sender of message, must be one of your Twilio Account phone #)</li>
+   </ul>
+   <p><strong>3) Configure an alert</strong></p>
+   <ul>
+      <li>Configure a Splunk alert and select the "Run a Script" option</li>
+      <li>Set "textalert-twilio.py" as the script</li>
+   </ul>
+   <p><em>Note: Twilio will charge you for every SMS message sent. You can view <a href="https://www.twilio.com/sms/pricing" target="_blank">Twilio pricing here</a>.</em></p>
+   <p><strong>4) Profit</strong></p>
+   <p>If everything has worked well the "TO phone number" should be recieving alerts. If not, check the alerts are being fired in the alert manager in the Splunk GUI via: "Activity" > "Alert Manager"</p>
+   <p>[END]</p>
+   <p>Enjoy!</p>
+   <a href="https://twitter.com/himynamesdave" target="_blank">@himynamesdave</a>
+</html>
+</row>
+</dashboard>
